@@ -5,10 +5,6 @@ tags: [beginner, setup]
 difficulty: beginner
 ---
 
-# Getting Started
-
-Your content here...
-
 # Knowledge Base
 
 A simple repository for collecting and organizing useful information, notes, and references.
