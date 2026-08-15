@@ -1,27 +1,39 @@
 ---
-title: Getting Started
-description: Learn how to set up your project
-tags: [beginner, setup]
+title: Welcome to Knowledge Book
+description: A personal knowledge base for programming concepts, best practices, and reference guides
+tags: [overview, guide]
 difficulty: beginner
 ---
 
-# Knowledge Base
+#  Knowledge Book
 
-A simple repository for collecting and organizing useful information, notes, and references.
+Welcome to my personal knowledge base — a growing collection of notes, guides, and references covering programming concepts from fundamentals to advanced topics.
 
-## Overview
+##  What You'll Find Here
 
-This project is a knowledge base that can store structured content and make it easy to find important details later.
+This knowledge base is organized into structured categories, each containing detailed notes with code examples, diagrams, and practical explanations.
 
-## Contents
 
-- `README.md` - project overview and instructions
-- `src/` - source files and application code
-- `docs/` - supporting documentation and notes
+## 🗺️ How To Navigate
 
-## Getting Started
+- Use the **sidebar** on the left to browse categories and pages
+- Use **Ctrl + K** to quickly search across all notes
+- Each page shows **reading time** and **difficulty level**
+- Pages include a **table of contents** on the right for longer articles
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/knowledge-base.git
-   cd knowledge-base
+## 📖 Content Structure
+
+Each topic follows a consistent structure:
+
+- **Definition** — Clear explanation of the concept
+- **Syntax** — Code patterns and usage
+- **Example Program** — Complete, runnable code examples
+- **Key Points** — Important takeaways and gotchas
+
+## 💡 About This Project
+
+This knowledge base is built with [Next.js](https://nextjs.org) and sources content from a GitHub repository. All content is written in Markdown with frontmatter metadata, making it easy to add, edit, and organize notes.
+
+---
+
+*Happy learning! 🎓*
