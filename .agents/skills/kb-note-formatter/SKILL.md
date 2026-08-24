@@ -47,24 +47,23 @@ By the end of this chapter, you'll understand:
 
 ---
 
-## <Concept 1: Definition & Real-World Analogy>
+## <Concept 1: Definition & Overview>
 
 <Clear explanation of the concept, breaking down jargon into intuitive terms.>
 
-### Real-Life Analogy
-<Intuitive real-world analogy (e.g., house construction, banking system, car manufacturing).>
+<Include a Mermaid diagram here if the concept involves relationships, flow, or architecture.>
 
-```mermaid
-<Visual diagram illustrating the workflow, architecture, or object hierarchy>
-```
+---
+
+## <Concept 1 — Real-Life Analogy>
+
+<Intuitive real-world analogy (e.g., house construction, banking system, car manufacturing).>
 
 ---
 
 ## <Concept 2: Technical Deep Dive & Java Code Implementation>
 
 <Detailed explanation of technical mechanisms, rules, and lifecycle.>
-
-### Code Example
 
 ```java
 // Clean, idiomatic Java code with clear inline comments
@@ -98,14 +97,6 @@ public class Example {
 
 ---
 
-## Key Points & Best Practices
-
-- **<Point 1>:** <Explanation>
-- **<Point 2>:** <Explanation>
-- **<Point 3>:** <Explanation>
-
----
-
 ## Summary
 
 | Concept / Aspect | Key Takeaway |
@@ -119,11 +110,91 @@ public class Example {
 ## 3. Formatting & Styling Guidelines
 
 ### Typography & Headings
-- Use a single `#` for the main title at the top of the file.
-- Use `##` for primary sections and `###` for sub-sections.
-- Use `---` dividers between major sections for clean visual pacing.
+
+> [!IMPORTANT]
+> **TOC Compatibility Rule:** The right-side Table of Contents in the IDE only renders `##` (H2) and `###` (H3) headings. To ensure every major section and sub-topic is clickable and visible in the TOC, follow these strict heading rules:
+
+- Use a **single `#`** for the main file title only — this is NOT shown in the TOC.
+- Use **`##`** for every top-level navigable section (concept introductions, code examples, comparisons, analogies, benefits, caveats, summaries, etc.).
+- Use **`###`** sparingly — only for minor clarifications or labeled sub-points *within* a `##` section that don't need their own TOC entry.
+- **Never use `####` (H4) headings** — they are invisible in the TOC and fragment the document structure.
+- **Do NOT bury navigable content under `###`** when it deserves its own TOC entry. For example:
+  - ❌ Bad: `## DRY` → `### Bad Code Example` → `### Good Code Example`
+  - ✅ Good: `## DRY — Overview`, `## DRY — Bad Code Example`, `## DRY — Good Code Example`
+- Use `---` dividers between every `##` section for clean visual pacing.
 - Use **bolding** for critical technical terms, class names, and keywords.
 - Use inline backticks for code identifiers, types, methods, and parameters (e.g., `login()`, `String`, `User`).
+
+### Heading Naming Patterns
+
+The repo uses two established `##`/`###` patterns depending on how deeply a concept needs to be broken down. Choose the right one based on content complexity.
+
+---
+
+**Pattern A — Flat `##` sections** *(use when each sub-topic is independently navigable)*
+
+Each sub-topic gets its own `##` heading. If a single concept spans multiple sections (overview, code example, caveat, comparison), prefix each `##` with the concept name to keep the TOC self-describing:
+
+```
+## <Concept>                          ← definition + diagram
+## <Concept> — Code Example           ← code walkthrough
+## <Concept> — Applying in Practice   ← how-to guidelines
+## <Concept> — When NOT to Apply      ← caveats and exceptions
+```
+
+Real examples from this repo (`09.polymorphism.md`, `10.abstraction.md`, `02.software-design-principles.md`):
+```
+## 1. Compile-Time Polymorphism (Static Polymorphism)
+## 2. Run-Time Polymorphism (Dynamic Polymorphism)
+## Compile-Time vs Run-Time Polymorphism
+
+## 1. Abstract Classes
+## 2. Interface
+## Abstract Class vs Interface
+```
+
+---
+
+**Pattern B — `##` parent + `###` children** *(use when sub-items are tightly grouped and not independently navigable)*
+
+A `##` section introduces a concept; `###` headings name tightly-related sub-items (e.g., numbered variants, labeled examples, named keypoints). This pattern is correct when the sub-items only make sense as part of the parent and don't need their own TOC slot:
+
+```
+## <Parent Concept>
+### 1. <Variant or Sub-Type>
+### 2. <Variant or Sub-Type>
+### 3. <Variant or Sub-Type>
+```
+
+Real examples from this repo (`13.inner-classes.md`, `08.inheritance.md`, `12.static-keyword.md`, `19.solid-principles.md`):
+```
+## Types of Inner Classes
+### 1. Static Nested Classes
+### 2. Non-Static Inner Classes
+### 3. Local Inner Classes
+
+## 1. Single Responsibility Principle (SRP)
+### Definition
+### Explanation
+### Example
+
+## Static Variables in Java
+### Definition
+### When to Use
+### Example
+```
+
+---
+
+**Decision Rule — Which pattern to use?**
+
+| Situation | Pattern |
+| :--- | :--- |
+| Sub-topic has its own code block, diagram, or needs direct TOC access | **Pattern A** — promote to `##` |
+| Sub-topic is a numbered variant, named sub-type, or tightly-grouped label | **Pattern B** — use `###` under a `##` parent |
+| Content is a brief inline clarification (a sentence or two) | Use **bold text** in the body, not a heading at all |
+
+**Never use `####` (H4)** — it is invisible in the TOC and should be replaced with either a `###`, a bold label, or restructured as a separate `##` section.
 
 ### Code Snippets
 - **Primary Language:** All code examples must be in **Java** unless the user explicitly requests another language.
@@ -169,7 +240,11 @@ When the user provides raw text, notes, or interview transcript:
    - Organize all provided points into the standard hierarchy (`What You'll Learn`, definitions, code examples, comparisons, and summary).
    - Expand terse or incomplete code snippets into fully formed, clean Java classes.
    - Add at least one relevant Mermaid diagram mapping out the concept.
-4. **Write & Validate:**
+4. **Apply TOC Compatibility:**
+   - Before writing, plan out the full heading hierarchy on paper.
+   - Every sub-topic, code example, caveat, and benefit that is a distinct navigable item MUST be a `##` heading — not `###` or `####`.
+   - Use the prefixed naming pattern: `## ConceptName — SubtopicName` for multi-part concepts.
+5. **Write & Validate:**
    - Use `write_to_file` to create `XX.<topic-name>.md` in the designated directory.
    - Verify the generated markdown for complete coverage, syntax correctness, valid mermaid syntax, and clean layout.
-
+   - **TOC check:** Mentally scan the heading list — every major item should be at `##` level and clickable in the IDE TOC panel.
