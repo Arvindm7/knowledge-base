@@ -1,250 +1,183 @@
 ---
 name: kb-note-formatter
 description: >-
-  Converts raw text, course transcripts, or unstructured explanations into standardized,
-  production-ready Markdown notes matching the knowledge-base repository style.
-  Use when the user provides raw text or lecture notes and asks to create or format a note file.
+  Use this skill when the user pastes plain/raw text content (notes, dumps,
+  copied articles, rough drafts) and wants it turned into a properly formatted
+  Markdown file for this knowledge base. Activate when the user says things
+  like "format this", "make this an md file", "convert this to a note",
+  "add this to the knowledge base", or pastes a wall of unformatted text.
+  This skill derives the correct file name, folder, and all structural
+  formatting rules from the established conventions in this repository.
 ---
 
-# Knowledge Base Note Formatter Skill
+# Knowledge Base Note Formatter
 
-This skill defines the standardized structure, formatting guidelines, and workflow for converting raw text, course notes, lecture transcripts, or concept explanations into high-quality `.md` files for the `knowledge-base` repository.
-
----
-
-## 1. File Naming & Directory Conventions
-
-Always verify existing files in the target directory to determine the correct numerical prefix and naming pattern:
-
-- **Naming Pattern:** `XX.topic-name.md` (e.g., `01.intro.md`, `02.class-and-objects.md`, `19.solid-principles.md`).
-- **Target Directories:**
-  - `Object Oriented Programming/` — Fundamental and advanced OOP concepts.
-  - `Low Level Design/` — System design patterns, UML, schema design, and modular architecture.
-  - `JAVA/` — Core Java language concepts, syntax, APIs, JVM internals, and libraries.
-- **Rules:**
-  - Lowercase with hyphens for multi-word topic names (e.g., `14.relationships-between-classes.md`).
-  - Maintain two-digit sequence prefixes (`01`, `02`, ..., `10`, etc.).
+This skill converts raw/plain text into a properly structured Markdown note
+that matches the formatting conventions used across this knowledge base
+(`d:\knowledge-base`).
 
 ---
 
-## 2. Standard Note Anatomy
+## Step 1 - Understand the Repository Conventions
 
-Every note in this knowledge base must adhere to the following section hierarchy:
+Before formatting, confirm you understand the following rules by cross-checking
+with the existing files. These rules were derived from analysing all files in
+the `Object Oriented Programming/`, `Low Level Design/`, and `JAVA/` folders.
 
-```markdown
-# <Topic Title in Title Case>
+### File Naming Convention
 
-> <Concise, punchy quote, definition, or one-sentence thesis statement>
+The pattern is: `NN.kebab-case-topic-name.md`
 
-## What You'll Learn
+- `NN` = zero-padded two-digit sequence number that continues from the **last
+  existing file** in the target folder (e.g. if last file is `06.encapsulation.md`,
+  the new file is `07.new-topic.md`).
+- The slug after the number is the topic in **lowercase kebab-case** - no
+  abbreviations, no underscores.
+- Determine the correct **target folder** from the topic (OOP concept ->
+  `Object Oriented Programming/`, LLD concept -> `Low Level Design/`,
+  Java syntax -> `JAVA/`). Ask the user if ambiguous.
 
-By the end of this chapter, you'll understand:
+### Document Structure (top to bottom)
 
-- <Core learning objective 1>
-- <Core learning objective 2>
-- <Core learning objective 3>
-- <Core learning objective 4>
+Every file must follow this structure in order:
 
----
+1. `# Topic Title in Title Case`
+2. `> One-line blockquote summarising the topic` (optional but strongly preferred)
+3. `## What You'll Learn` section with a bullet list
+4. `---` horizontal rule
+5. Main content sections using `##` and `###`
+6. `---` between every `##` section
+7. `## Summary` table at the end
 
-## <Concept 1: Definition & Overview>
+### Heading Hierarchy Rules (CRITICAL)
 
-<Clear explanation of the concept, breaking down jargon into intuitive terms.>
-
-<Include a Mermaid diagram here if the concept involves relationships, flow, or architecture.>
-
----
-
-## <Concept 1 — Real-Life Analogy>
-
-<Intuitive real-world analogy (e.g., house construction, banking system, car manufacturing).>
-
----
-
-## <Concept 2: Technical Deep Dive & Java Code Implementation>
-
-<Detailed explanation of technical mechanisms, rules, and lifecycle.>
-
-```java
-// Clean, idiomatic Java code with clear inline comments
-import java.util.*;
-
-public class Example {
-    // Attributes with access modifiers
-    private String name;
-
-    // Constructors
-    public Example(String name) {
-        this.name = name;
-    }
-
-    // Methods with proper encapsulation
-    public void execute() {
-        System.out.println("Executing: " + name);
-    }
-}
-```
-
----
-
-## <Concept 3: Comparison / Deep Breakdown>
-
-| Aspect | <Concept A> | <Concept B> |
-| :--- | :--- | :--- |
-| **Definition** | ... | ... |
-| **Approach** | ... | ... |
-| **Use Case** | ... | ... |
-
----
-
-## Summary
-
-| Concept / Aspect | Key Takeaway |
+| Level | Use for |
 | :--- | :--- |
-| **<Topic A>** | <Summary takeaway> |
-| **<Topic B>** | <Summary takeaway> |
-```
+| `#` | Document title - exactly one per file |
+| `##` | Top-level sections (What You'll Learn, main topic sections, Summary) |
+| `###` | Sub-sections that belong under a `##` parent |
+| `####` | Rarely used; only for deeply nested sub-sub-sections |
+
+IMPORTANT: Never use `##` for a section that logically belongs under another
+`##` section. For example, "DRY - Bad Code Example" must be `###` because it
+lives under `## 1. DRY`. Flat `##` hierarchies break the Table of Contents (TOC).
+
+### Mandatory Sections
+
+1. `# Title` - Required. Title Case.
+2. `> blockquote` - Strongly preferred one-liner summary.
+3. `## What You'll Learn` - Required. Bullet list of learning outcomes.
+4. `---` separators - Required between every top-level `##` section.
+5. `## Summary` - Required at the end. Always a markdown table.
+
+### Optional but Common Sections
+
+- `## Key Concept` or `## Key Characteristics` - for definitional content.
+- `### [Topic] - Bad Code Example` and `### [Topic] - Good Code Example` as
+  sub-sections under their parent `##` section.
+- `## Importance of [Topic]` with `### Benefit 1: ...` sub-sections.
+- GitHub alerts: `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`,
+  `> [!CAUTION]` - use sparingly, never consecutive or nested.
+
+### Code Blocks
+
+- Always specify a language tag: java, mermaid, text, etc.
+- Java code must include `import java.util.*;` when collections are used.
+- Class and method names follow Java conventions (PascalCase / camelCase).
+
+### Mermaid Diagrams
+
+- Use `flowchart TD` or `flowchart LR` for process and concept flows.
+- Use `classDiagram` for class/interface relationships.
+- Quote node labels containing special characters: `["Label (Info)"]`.
+
+### Tables
+
+- Use aligned column separators: `| :--- | :--- |` (left-aligned for all columns).
+- Bold the left-column concept/term: `| **Term** | Description |`.
+
+### Content Fidelity Rule (CRITICAL)
+
+**Preserve ALL content from the raw text exactly as pasted.** Do not:
+- Add explanations, examples, or context that were not in the original text.
+- Invent code examples only if none were provided.
+- Summarise or shorten the user's content.
+- Add filler sentences like "In this section we will..."
+
+Your job is purely **structural reformatting** — apply headings, separators,
+code blocks, and tables to what the user gave you. Every sentence from the
+original must appear in the output.
+
+The only exceptions allowed are:
+- The `> blockquote` one-liner (derive it from the first sentence of the text).
+- The `## What You'll Learn` bullets (derive them from the actual topics covered
+  in the text, not invented topics).
+- The `## Summary` table rows (summarise concepts that already appear in the text).
 
 ---
 
-## 3. Formatting & Styling Guidelines
+## Step 2 - Determine Target Folder and File Name
 
-### Typography & Headings
-
-> [!IMPORTANT]
-> **TOC Compatibility Rule:** The right-side Table of Contents in the IDE only renders `##` (H2) and `###` (H3) headings. To ensure every major section and sub-topic is clickable and visible in the TOC, follow these strict heading rules:
-
-- Use a **single `#`** for the main file title only — this is NOT shown in the TOC.
-- Use **`##`** for every top-level navigable section (concept introductions, code examples, comparisons, analogies, benefits, caveats, summaries, etc.).
-- Use **`###`** sparingly — only for minor clarifications or labeled sub-points *within* a `##` section that don't need their own TOC entry.
-- **Never use `####` (H4) headings** — they are invisible in the TOC and fragment the document structure.
-- **Do NOT bury navigable content under `###`** when it deserves its own TOC entry. For example:
-  - ❌ Bad: `## DRY` → `### Bad Code Example` → `### Good Code Example`
-  - ✅ Good: `## DRY — Overview`, `## DRY — Bad Code Example`, `## DRY — Good Code Example`
-- Use `---` dividers between every `##` section for clean visual pacing.
-- Use **bolding** for critical technical terms, class names, and keywords.
-- Use inline backticks for code identifiers, types, methods, and parameters (e.g., `login()`, `String`, `User`).
-
-### Heading Naming Patterns
-
-The repo uses two established `##`/`###` patterns depending on how deeply a concept needs to be broken down. Choose the right one based on content complexity.
+1. Identify the topic from the plain text.
+2. Identify the correct folder:
+   - OOP concepts (classes, objects, encapsulation, inheritance, etc.)
+     -> `Object Oriented Programming/`
+   - LLD concepts (design patterns, design principles, system components)
+     -> `Low Level Design/`
+   - Java language features (variables, data types, loops, arrays, etc.)
+     -> `JAVA/`
+   - Ask the user if the topic could belong to multiple folders.
+3. Use `list_dir` to find the last file number in the target folder.
+4. Construct the filename: `(last_number + 1).kebab-case-topic.md`
 
 ---
 
-**Pattern A — Flat `##` sections** *(use when each sub-topic is independently navigable)*
+## Step 3 - Format the Content
 
-Each sub-topic gets its own `##` heading. If a single concept spans multiple sections (overview, code example, caveat, comparison), prefix each `##` with the concept name to keep the TOC self-describing:
+Transform the raw text following all rules in Step 1.
+Do NOT add content that was not in the original — only reformat/restructure:
 
-```
-## <Concept>                          ← definition + diagram
-## <Concept> — Code Example           ← code walkthrough
-## <Concept> — Applying in Practice   ← how-to guidelines
-## <Concept> — When NOT to Apply      ← caveats and exceptions
-```
+1. Derive a one-line `>` blockquote summary from the opening of the text.
+2. Derive `## What You'll Learn` bullets from the actual topics covered.
+3. Identify logical sections in the text and assign correct `##` / `###` levels.
+4. Wrap inline code references in backticks.
+5. Wrap code snippets in fenced code blocks with the correct language tag.
+6. Add `---` separators between every `##` section.
+7. Write a `## Summary` table whose rows only reference concepts from the text.
 
-Real examples from this repo (`09.polymorphism.md`, `10.abstraction.md`, `02.software-design-principles.md`):
-```
-## 1. Compile-Time Polymorphism (Static Polymorphism)
-## 2. Run-Time Polymorphism (Dynamic Polymorphism)
-## Compile-Time vs Run-Time Polymorphism
-
-## 1. Abstract Classes
-## 2. Interface
-## Abstract Class vs Interface
-```
+Every sentence, paragraph, and code block from the raw text must appear
+in the formatted output. Do not drop, shorten, or skip any of it.
 
 ---
 
-**Pattern B — `##` parent + `###` children** *(use when sub-items are tightly grouped and not independently navigable)*
+## Step 4 - Create the File
 
-A `##` section introduces a concept; `###` headings name tightly-related sub-items (e.g., numbered variants, labeled examples, named keypoints). This pattern is correct when the sub-items only make sense as part of the parent and don't need their own TOC slot:
+Use `write_to_file` to create the file at:
+  `d:\knowledge-base\<TargetFolder>\<NN.kebab-case-topic.md>`
 
-```
-## <Parent Concept>
-### 1. <Variant or Sub-Type>
-### 2. <Variant or Sub-Type>
-### 3. <Variant or Sub-Type>
-```
-
-Real examples from this repo (`13.inner-classes.md`, `08.inheritance.md`, `12.static-keyword.md`, `19.solid-principles.md`):
-```
-## Types of Inner Classes
-### 1. Static Nested Classes
-### 2. Non-Static Inner Classes
-### 3. Local Inner Classes
-
-## 1. Single Responsibility Principle (SRP)
-### Definition
-### Explanation
-### Example
-
-## Static Variables in Java
-### Definition
-### When to Use
-### Example
-```
+After writing, confirm to the user:
+- The full file path as a clickable link
+- The heading structure (so they can verify the TOC will render correctly)
+- Any assumptions made about folder or topic categorisation
 
 ---
 
-**Decision Rule — Which pattern to use?**
+## Reference Examples
 
-| Situation | Pattern |
-| :--- | :--- |
-| Sub-topic has its own code block, diagram, or needs direct TOC access | **Pattern A** — promote to `##` |
-| Sub-topic is a numbered variant, named sub-type, or tightly-grouped label | **Pattern B** — use `###` under a `##` parent |
-| Content is a brief inline clarification (a sentence or two) | Use **bold text** in the body, not a heading at all |
+Study these existing files to calibrate expected output quality:
 
-**Never use `####` (H4)** — it is invisible in the TOC and should be replaced with either a `###`, a bold label, or restructured as a separate `##` section.
+- `Low Level Design/02.software-design-principles.md`
+  Good example of `##` parent sections with `###` sub-sections.
+  (DRY/KISS/YAGNI with Bad Code / Good Code examples nested under each.)
 
-### Code Snippets
-- **Primary Language:** All code examples must be in **Java** unless the user explicitly requests another language.
-- **Completeness:** Write clean, complete, idiomatic Java code with class declarations, proper access modifiers (`private`, `public`, `protected`), constructors, and a runnable `main()` method when demonstrating client usage.
-- **Imports:** Include standard library imports (`import java.util.*;`) where relevant.
-- **Comments:** Include concise inline comments explaining non-trivial logic.
+- `Object Oriented Programming/06.encapsulation.md`
+  Good example of Key Concept, Example, Key Takeaways, Summary table,
+  and a `> [!NOTE]` alert.
 
-### Visual Diagrams (Mermaid)
-Always include at least one relevant Mermaid diagram when explaining relationships, architectures, or workflows:
-- **Class Relationships & OOP:** Use `mermaid classDiagram` (showing inheritance `<|--`, composition `*--`, aggregation `o--`, or implementation `<|..`).
-- **Architectural / Flowcharts:** Use `mermaid flowchart LR` or `graph TD` for component interactions and step-by-step logic.
-- **Lifecycles & Interactions:** Use `mermaid sequenceDiagram` or `stateDiagram-v2` for object lifecycles and messaging.
+- `Object Oriented Programming/19.solid-principles.md`
+  Good example of numbered main sections (`## 1. SRP`, `## 2. OCP`) each
+  with `### Definition`, `### Explanation`, `### Example` sub-sections.
 
-### Comparison Tables
-- Use clean Markdown tables with header alignment markers (`| :--- | :--- | :--- |`).
-- Compare concepts across clear dimensions: Purpose, Level of Detail, Focus, Implementation, Advantages, and Trade-offs.
-
----
-
-## 4. Content Completeness & Fidelity Rules
-
-> [!IMPORTANT]
-> **Zero Information Loss Principle:** Never omit, skip, or over-summarize any information, concept, example, analogy, link, or note provided by the user.
-
-- **Complete Inclusion:** Every piece of information, note, prerequisite, stakeholder mention, distinction, or nuance present in the user's raw input must be faithfully preserved and represented in the final note.
-- **Additive Expansion (No Degradation):**
-  - **DO:** Add more content, richer context, full runnable Java implementations, detailed architectural explanations, edge cases, and Mermaid diagrams to elevate the quality of the note.
-  - **DO NOT:** Strip away, overly condense, or alter the meaning of user-provided points.
-- **Preserve User Examples & Domain Models:** If the user supplies specific domain examples (e.g., house construction, `AuthService`, `EmailNotification`, `login()`, `forgotPassword()`), preserve those exact names, relationships, and concepts in the code and explanations.
-
----
-
-## 5. Processing Workflow: Raw Text to Standard Note
-
-When the user provides raw text, notes, or interview transcript:
-
-1. **Inspect Workspace Context:**
-   - Check the target directory using `list_dir` to determine the latest file index number (e.g. `02`, `03`).
-2. **Audit Raw Input for 100% Coverage:**
-   - List all concepts, examples, analogies, notes, and links from the user's input to guarantee zero omission.
-3. **Structure & Enrich:**
-   - Extract the core topic and formulate an informative title and tagline blockquote.
-   - Organize all provided points into the standard hierarchy (`What You'll Learn`, definitions, code examples, comparisons, and summary).
-   - Expand terse or incomplete code snippets into fully formed, clean Java classes.
-   - Add at least one relevant Mermaid diagram mapping out the concept.
-4. **Apply TOC Compatibility:**
-   - Before writing, plan out the full heading hierarchy on paper.
-   - Every sub-topic, code example, caveat, and benefit that is a distinct navigable item MUST be a `##` heading — not `###` or `####`.
-   - Use the prefixed naming pattern: `## ConceptName — SubtopicName` for multi-part concepts.
-5. **Write & Validate:**
-   - Use `write_to_file` to create `XX.<topic-name>.md` in the designated directory.
-   - Verify the generated markdown for complete coverage, syntax correctness, valid mermaid syntax, and clean layout.
-   - **TOC check:** Mentally scan the heading list — every major item should be at `##` level and clickable in the IDE TOC panel.
+- `Object Oriented Programming/03.attribute-and-method.md`
+  Good example of a simpler file: `> blockquote`, clean `##` sections,
+  and `---` separators between every section.
