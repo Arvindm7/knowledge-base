@@ -35,7 +35,8 @@ The pattern is: `NN.kebab-case-topic-name.md`
   abbreviations, no underscores.
 - Determine the correct **target folder** from the topic (OOP concept ->
   `Object Oriented Programming/`, LLD concept -> `Low Level Design/`,
-  Java syntax -> `JAVA/`). Ask the user if ambiguous.
+  Java syntax -> `Java/`, everyday tech knowledge / fun learnings / general tech ->
+  `Tech Bytes/`). Ask the user if ambiguous.
 
 ### Document Structure (top to bottom)
 
@@ -125,7 +126,9 @@ The only exceptions allowed are:
    - LLD concepts (design patterns, design principles, system components)
      -> `Low Level Design/`
    - Java language features (variables, data types, loops, arrays, etc.)
-     -> `JAVA/`
+     -> `Java/`
+   - Everyday fun tech knowledge, quick learnings, and general tech notes
+     -> `Tech Bytes/`
    - Ask the user if the topic could belong to multiple folders.
 3. Use `list_dir` to find the last file number in the target folder.
 4. Construct the filename: `(last_number + 1).kebab-case-topic.md`
