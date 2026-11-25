@@ -52,4 +52,9 @@ jobs:
           token: ${{ secrets.BOOK_WEBSITE_PAT }}
           repository: Arvindm7/knowledge-book
           event-type: knowledge-base-updated
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "message": "${{ github.event.head_commit.message }}"}'
+          client-payload: |
+            {
+              "ref": ${{ toJSON(github.ref) }},
+              "sha": ${{ toJSON(github.sha) }},
+              "message": ${{ toJSON(github.event.head_commit.message) }}
+            }
